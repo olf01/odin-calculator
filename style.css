@@ -1,0 +1,75 @@
+* {
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Courier New', Courier, monospace
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+#frame {
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+    gap: 20px;
+    aspect-ratio: 0.6;
+    padding: 20px;
+    background-color: blue;
+}
+
+#calculationDisplay {
+    height: 20%;
+    background-color: turquoise;
+}
+
+#mainDisplay {
+    height: 20%;
+    background-color: yellow;
+    text-align: right;
+    font-size: 100px;
+}
+
+#keys {
+    display: flex;
+    background-color: magenta;
+}
+
+#digits {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    width: 75%;
+    background-color: yellow;
+}
+
+#digits  div {
+    width: 33.333%;
+    
+    aspect-ratio: 1;
+}
+
+#digits  #zero {
+    width: 100%;
+    aspect-ratio: 3;
+}
+
+#functions {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2%;
+    background-color: white;
+}
+
+#functions  div {
+    flex: 1;
+}
