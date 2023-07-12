@@ -3,9 +3,6 @@ const calculationDisplay = document.getElementById('calculationDisplay')
 const clearKey = document.getElementById('clear')
 const decimalKey = document.getElementById('decimal')
 const equalsKey = document.getElementById('equals')
-let firstValue = ''
-let operator = ''
-let secondValue = ''
 let calculation = ['', '', '']
 let isResult = false
 
@@ -25,28 +22,26 @@ function divide (num1, num2) {
     return num1 / num2;
 }
 
-function operate (num1, operator, num2) {
-    return operator(num1, num2);
-}
-
 function setCalculationValue (digit) {
-    if (isResult || calculation[0] == '0') {
+    if (calculation[1]) {
+        if (calculation[2] != '0') {
+            calculation[2] += digit.textContent;
+        }
+    } else if (isResult || calculation[0] == '0') {
         calculation[0] = digit.textContent;
         isResult = false;
-    } else if (calculation[1]) {
-        calculation[2] += digit.textContent;
     } else {
         calculation[0] += digit.textContent;
     }
-    console.log(calculation)
     updateDisplays();
+    console.log(calculation);
 }
 
 function decimal () {
     if (calculation[2] && !calculation[2].includes('.')) {
         calculation[2] += '.';
         updateDisplays();
-    } else if (calculation[0] && !isResult && !calculation[0].includes('.')) {
+    } else if (calculation[0] && !(isResult || calculation[0].includes('.') || calculation[1])) {
         calculation [0] += '.';
         updateDisplays();
     }
@@ -70,17 +65,23 @@ function calculate () {
     if (calculation[2] && calculation[2].charAt(calculation[2].length - 1) != '.') {
         switch (calculation[1]) {
             case "÷":
-                calculation[0] = String(operate(+calculation[0], divide, +calculation[2]));
+                calculation[0] = String(divide(+calculation[0], +calculation[2]));
                 break;
             case "×":
-                calculation[0] = String(operate(+calculation[0], multiply, +calculation[2]));
+                calculation[0] = String(multiply(+calculation[0], +calculation[2]));
                 break;
             case "-":
-                calculation[0] = String(operate(+calculation[0], subtract, +calculation[2]));
+                calculation[0] = String(subtract(+calculation[0], +calculation[2]));
                 break;
             case "+":
-                calculation[0] = String(operate(+calculation[0], add, +calculation[2]));
+                calculation[0] = String(add(+calculation[0], +calculation[2]));
                 break;
+        }
+
+        let i = 6;
+        while (calculation[0].length > 11) {
+            calculation[0] = String((+calculation[0]).toExponential(i));
+            i--;
         }
 
         isResult = true;
@@ -97,6 +98,8 @@ function clear () {
 }
 
 function updateDisplays () {
+    calculation[0] = calculation[0].slice(0, 11);
+    calculation[2] = calculation[2].slice(0, 11);
     if (calculation[2]) {
         mainDisplay.textContent = calculation[2]
         calculationDisplay.textContent = calculation.join('');
@@ -110,12 +113,12 @@ function updateDisplays () {
     }
 }
 
-document.getElementById('digits').childNodes.forEach(function (digit) {digit.addEventListener('click', function () {setCalculationValue(this)})})
+document.getElementById('digits').childNodes.forEach(function (digit) {digit.addEventListener('click', function () {setCalculationValue(this)})});
 
-clearKey.addEventListener('click', clear)
+clearKey.addEventListener('click', clear);
 
-document.querySelectorAll('.operator').forEach(function (operator) {operator.addEventListener('click', function () {setCalculationOperator(this)})})
+document.querySelectorAll('.operator').forEach(function (operator) {operator.addEventListener('click', function () {setCalculationOperator(this)})});
 
-decimalKey.addEventListener('click', decimal)
+decimalKey.addEventListener('click', decimal);
 
-equalsKey.addEventListener('click', calculate)
+equalsKey.addEventListener('click', calculate);
